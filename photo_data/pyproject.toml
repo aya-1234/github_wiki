@@ -1,0 +1,34 @@
+[project]
+name = "photo-organizer"
+version = "0.1.0"
+description = "Organize photos into date-based folders"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "Pillow>=11.0",
+    "python-dotenv>=1.0",
+    "PySide6>=6.8",
+]
+
+[project.optional-dependencies]
+dev = ["mypy>=1.15", "pytest>=8.0", "pytest-cov>=6.0", "ruff>=0.11"]
+build = ["pyinstaller>=6.0"]
+
+[project.scripts]
+photo-organizer = "photo_organizer.cli.commands:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/photo_organizer"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.22.3",
+]

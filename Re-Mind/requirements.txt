@@ -1,0 +1,7 @@
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Login
+Werkzeug
+APScheduler
+psycopg2-binary

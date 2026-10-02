@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "attendance-login"
+version = "0.1.0"
+description = "Salesforce勤怠管理システム自動入力ツール"
+requires-python = ">=3.10"
+dependencies = [
+    "selenium>=4.18,<5",
+]
+
+[project.scripts]
+attendance-login = "attendance_login.main:cli"
+
+[tool.setuptools.packages.find]
+include = ["attendance_login*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

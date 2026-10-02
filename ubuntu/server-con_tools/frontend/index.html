@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Control</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h1>Server Control</h1>
+
+        <nav>
+            <a href="#" data-page="dashboard" class="active">Dashboard</a>
+            <a href="#" data-page="processes">Processes</a>
+            <a href="#" data-page="services">Services</a>
+            <a href="#" data-page="network">Network</a>
+            <a href="#" data-page="disk">Disk</a>
+            <a href="#" data-page="users">Users</a>
+        </nav>
+    </aside>
+
+
+    <main class="content">
+
+        <section id="page-dashboard">
+
+            <header class="header">
+                <div>
+                    <h2>Dashboard</h2>
+                    <p>System Overview</p>
+                </div>
+
+                <div id="hostname">
+                    Loading...
+                </div>
+            </header>
+
+            <section class="cards">
+
+                <div class="card">
+                    <h3>CPU</h3>
+                    <div class="value" id="cpu">-</div>
+                    <div class="unit">%</div>
+                </div>
+
+                <div class="card">
+                    <h3>Memory</h3>
+                    <div class="value" id="memory">-</div>
+                    <div class="unit">%</div>
+                </div>
+
+                <div class="card">
+                    <h3>Disk</h3>
+                    <div class="value" id="disk">-</div>
+                    <div class="unit">%</div>
+                </div>
+
+            </section>
+
+            <section class="system-info">
+                <h3>System Information</h3>
+
+                <dl>
+                    <dt>Hostname</dt>
+                    <dd id="system-hostname">-</dd>
+
+                    <dt>OS</dt>
+                    <dd id="os">-</dd>
+
+                    <dt>Kernel</dt>
+                    <dd id="kernel">-</dd>
+
+                    <dt>Architecture</dt>
+                    <dd id="architecture">-</dd>
+
+                    <dt>CPU Count</dt>
+                    <dd id="cpu-count">-</dd>
+
+                    <dt>Uptime</dt>
+                    <dd id="uptime">-</dd>
+                </dl>
+            </section>
+
+            <section class="load">
+                <h3>Load Average</h3>
+
+                <div class="load-grid">
+                    <div>
+                        <span>1 min</span>
+                        <strong id="load-1">-</strong>
+                    </div>
+
+                    <div>
+                        <span>5 min</span>
+                        <strong id="load-5">-</strong>
+                    </div>
+
+                    <div>
+                        <span>15 min</span>
+                        <strong id="load-15">-</strong>
+                    </div>
+                </div>
+            </section>
+
+        </section>
+
+
+        <section id="page-processes" hidden>
+            <header class="header">
+                <div>
+                    <h2>Processes</h2>
+                    <p>Running processes</p>
+                </div>
+                <div>
+                    <span id="process-count">0 processes</span>
+                </div>
+            </header>
+            <section class="process-toolbar">
+                <input type="text" id="process-search" placeholder="Search PID or process name..." >
+                <select id="process-sort">
+                    <option value="pid">PID</option>
+                    <option value="name">Name</option>
+                    <option value="cpu">CPU</option>
+                    <option value="memory">Memory</option>
+                </select>
+                <button id="process-refresh">Refresh</button>
+            </section>
+            <div class="process-layout">
+                <section class="process-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>PID</th>
+                                <th>Name</th>
+                                <th>User</th>
+                                <th>CPU</th>
+                                <th>Memory</th>
+                            </tr>
+                        </thead>
+                        <tbody id="process-table">
+                            <tr>
+                                <td colspan="5">
+                                    Loading...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section class="process-detail">
+                    <h3>Process Detail</h3>
+                    <div id="process-detail">
+                        Select a process.
+                    </div>
+                </section>
+            </div>
+        </section>
+        <section id="page-network" hidden>
+
+            <header class="header">
+                <div>
+                    <h2>Network</h2>
+                    <p>TCP connections</p>
+                </div>
+
+                <div>
+                    <span id="network-count">0 connections</span>
+                </div>
+            </header>
+
+            <section class="network-toolbar">
+
+                <input
+                    type="text"
+                    id="network-search"
+                    placeholder="Search process, address or port..."
+                >
+
+                <select id="network-status">
+                    <option value="">All Status</option>
+                    <option value="LISTEN">LISTEN</option>
+                    <option value="ESTABLISHED">ESTABLISHED</option>
+                    <option value="CLOSE_WAIT">CLOSE_WAIT</option>
+                    <option value="TIME_WAIT">TIME_WAIT</option>
+                </select>
+
+                <button id="network-refresh">
+                    Refresh
+                </button>
+
+            </section>
+
+            <div class="network-layout">
+
+                <section class="network-list">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>PID</th>
+                                <th>Process</th>
+                                <th>Protocol</th>
+                                <th>Local</th>
+                                <th>Remote</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="network-table">
+                            <tr>
+                                <td colspan="6">
+                                    Loading...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </section>
+
+                <section class="network-detail">
+
+                    <h3>Connection Detail</h3>
+
+                    <div id="network-detail">
+                        Select a connection.
+                    </div>
+
+                </section>
+
+            </div>
+
+        </section>
+    </main>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
