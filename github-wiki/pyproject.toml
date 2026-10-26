@@ -1,0 +1,19 @@
+[project]
+name = "github-wiki"
+version = "0.1.0"
+description = "Import Markdown, PDF, and Office files into GitHub Wiki"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi>=0.141.1",
+    "markdown-it-py>=4.2.0",
+    "python-multipart>=0.0.32",
+    "uvicorn>=0.52.4",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pillow>=12.3.0",
+    "pytest>=9.1.1",
+]

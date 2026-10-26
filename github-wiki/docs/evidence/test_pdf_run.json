@@ -1,0 +1,14 @@
+{
+  "pdf": "/home/kuchida/repo/gi/2026/github-wiki/test.pdf",
+  "convertStatus": 200,
+  "convertedMarkdown": "## PDF 1ページ目\n\nGitHub Wiki PDF test\n",
+  "previewStatus": 200,
+  "githubPublishStatus": 502,
+  "githubPublishResponse": {
+    "code": "GIT_REMOTE_ERROR",
+    "message": "Git 操作に失敗しました。Wiki と接続状態を確認してください"
+  },
+  "localPublishStatus": 201,
+  "localSavedBodyMatches": true,
+  "localCommitSha": "54c8bab59cc8934fb1f057a61bea16bc1a9e9ccb"
+}

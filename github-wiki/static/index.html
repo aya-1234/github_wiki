@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GitHub Wiki に追加</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#20252e;background:#f4f6f9}body{max-width:1000px;margin:30px auto;padding:0 20px}main{background:white;padding:28px;border-radius:12px;box-shadow:0 3px 18px #16203316}h1{margin-top:0}label{display:block;font-weight:600;margin:20px 0 7px}input[type=text],textarea{box-sizing:border-box;width:100%;border:1px solid #aeb8c5;border-radius:6px;padding:10px;font:inherit}textarea{min-height:300px;font-family:ui-monospace,monospace}button{border:0;border-radius:6px;background:#1769aa;color:#fff;font:inherit;font-weight:600;padding:11px 18px;cursor:pointer}button:disabled{background:#9da8b3;cursor:default}.row{display:grid;grid-template-columns:1fr 1fr;gap:18px}.preview{border:1px solid #c8d0d9;border-radius:6px;padding:12px;min-height:300px;overflow:auto;overflow-wrap:anywhere}#status{min-height:2em;margin-top:16px}#warnings{color:#805700}#status.error{color:#a01c24}#status.success{color:#17633b}@media(max-width:750px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body><main>
+<h1>GitHub Wiki に追加</h1><p>Markdown、PDF、Word、Excel、PowerPoint を取り込み、内容を確認して PR 用のページを保存します。PR のマージ後に Wiki へ公開されます。</p>
+<label for="file">ファイル（.md / .pdf / .docx / .xlsx / .pptx、20 MiB 以下）</label><input id="file" type="file" accept=".md,.pdf,.docx,.xlsx,.pptx"><p id="warnings" aria-live="polite"></p>
+<label for="title">ページ名</label><input id="title" type="text" maxlength="100">
+<div class="row"><section><label for="body">Markdown 本文</label><textarea id="body" spellcheck="false"></textarea></section><section><label>プレビュー</label><div id="preview" class="preview"></div></section></div>
+<p><button id="publish" disabled>PR 用 Markdown を保存</button></p><div id="status" role="status" aria-live="polite"></div>
+</main><script>
+const $=id=>document.getElementById(id);
+let converted=false,converting=false,publishing=false,previewTimer;
+let conversionId=0,previewId=0;
+let sourceWarnings=[];
+function state(){
+  $('publish').disabled=!converted||converting||publishing||!$('title').value.trim()||!$('body').value.trim();
+  $('file').disabled=publishing;
+  $('title').disabled=converting||publishing;
+  $('body').disabled=converting||publishing;
+}
+function status(message,kind=''){ $('status').className=kind;$('status').textContent=message; }
+async function request(url,options){let r=await fetch(url,options),data=await r.json();if(!r.ok)throw Error(data.message||'処理に失敗しました');return data;}
+function invalidatePreview(){++previewId;clearTimeout(previewTimer);}
+async function preview(){
+  const current=++previewId,source=$('body').value;
+  try{
+    const data=await request('/api/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({markdown:source})});
+    if(current===previewId&&$('body').value===source){
+      $('preview').innerHTML=data.html;
+      $('warnings').textContent=[...sourceWarnings,...(data.warnings||[])].join(' / ');
+    }
+  }catch(e){
+    if(current===previewId&&$('body').value===source)$('preview').textContent=e.message;
+  }
+}
+$('file').addEventListener('change',async()=>{
+  if(publishing)return;
+  const current=++conversionId,file=$('file').files[0];
+  invalidatePreview();converted=false;converting=!!file;sourceWarnings=[];
+  $('title').value='';$('body').value='';$('preview').innerHTML='';$('warnings').textContent='';
+  state();
+  if(!file){status('');return;}
+  status('変換中…');
+  try{
+    const form=new FormData();form.append('file',file);
+    const data=await request('/api/convert',{method:'POST',body:form});
+    if(current!==conversionId)return;
+    $('title').value=data.title;$('body').value=data.markdown;
+    sourceWarnings=data.sourceWarnings||[];
+    $('warnings').textContent=data.warnings.join(' / ');
+    converted=true;status('変換しました。内容を確認してください。');
+    await preview();
+  }catch(e){
+    if(current===conversionId)status(e.message,'error');
+  }finally{
+    if(current===conversionId){converting=false;state();}
+  }
+});
+for(const id of ['title','body'])$(id).addEventListener('input',()=>{
+  state();
+  if(id==='body'){
+    invalidatePreview();
+    $('warnings').textContent=sourceWarnings.join(' / ');
+    previewTimer=setTimeout(preview,250);
+  }
+});
+$('publish').addEventListener('click',async()=>{
+  if(!converted||converting||publishing||$('publish').disabled)return;
+  publishing=true;state();status('審査用ファイルを保存中…');
+  try{
+    const data=await request('/api/stage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:$('title').value,markdown:$('body').value})});
+    converted=false;status('保存しました: '+data.path+'。ブランチへコミットして PR を作成してください。','success');
+  }catch(e){status(e.message,'error');}
+  finally{publishing=false;state();}
+});
+</script></body></html>

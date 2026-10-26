@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-19",
+  "pageStatus": 200,
+  "markdown": {
+    "status": 200,
+    "response": {
+      "title": "Guide",
+      "markdown": "# Guide\n\nWelcome to the wiki.\n\n[Details](./details.md)\n\n![Logo](images/logo.png)\n",
+      "warnings": [
+        "相対リンク: ./details.md — Wiki での参照先を確認してください",
+        "相対画像: images/logo.png — 画像は自動登録されません"
+      ],
+      "sourceWarnings": []
+    },
+    "preview": {
+      "html": "<h1>Guide</h1>\n<p>Welcome to the wiki.</p>\n<p><a href=\"./details.md\">Details</a></p>\n<p><img src=\"images/logo.png\" alt=\"Logo\" /></p>\n",
+      "warnings": [
+        "相対リンク: ./details.md — Wiki での参照先を確認してください",
+        "相対画像: images/logo.png — 画像は自動登録されません"
+      ]
+    }
+  },
+  "pdf": {
+    "status": 200,
+    "response": {
+      "title": "Manual",
+      "markdown": "## PDF 1ページ目\n\nFirst page\n\n## PDF 2ページ目\n\nSecond page\n",
+      "warnings": [
+        "抽出文字が少ないため、元の PDF と照合してください"
+      ],
+      "sourceWarnings": [
+        "抽出文字が少ないため、元の PDF と照合してください"
+      ]
+    },
+    "preview": {
+      "html": "<h2>PDF 1ページ目</h2>\n<p>First page</p>\n<h2>PDF 2ページ目</h2>\n<p>Second page</p>\n",
+      "warnings": []
+    }
+  },
+  "publish": {
+    "status": 201,
+    "response": {
+      "pageUrl": "https://github.com/demo/wiki/wiki/Guide",
+      "wikiUrl": "https://github.com/demo/wiki/wiki",
+      "commitSha": "fca47aab5d491647aacb24f1b65d67e39e014aa1"
+    },
+    "savedMarkdownMatches": true
+  },
+  "duplicate": {
+    "status": 409,
+    "response": {
+      "code": "PAGE_EXISTS",
+      "message": "同名の Wiki ページが既にあります"
+    }
+  },
+  "remote": "temporary local bare Git repository",
+  "browserScreenshotCaptured": false
+}

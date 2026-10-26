@@ -1,0 +1,51 @@
+name: Review and publish Wiki pages
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    paths:
+      - 'wiki-pages/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+      - name: Validate added pages
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: uv run --frozen --no-dev python -m scripts.wiki_pr validate --base "$BASE_SHA" --head "$HEAD_SHA" --pr
+
+  publish:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: github-wiki-publish
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+      - name: Publish new pages
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+          WIKI_PUSH_TOKEN: ${{ secrets.WIKI_PUSH_TOKEN }}
+          GIT_ASKPASS: ${{ github.workspace }}/scripts/wiki_askpass.py
+          GIT_TERMINAL_PROMPT: '0'
+        run: |
+          chmod 700 scripts/wiki_askpass.py
+          uv run --frozen --no-dev python -m scripts.wiki_pr publish --base "$BEFORE_SHA" --head "$AFTER_SHA"
