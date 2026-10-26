@@ -1,0 +1,10 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+*.log
+.pytest_cache/
+.coverage
+
+# 保存HTMLにはアカウント情報や一時的な認証トークンが含まれ得る。
+use_html/

@@ -1,0 +1,17 @@
+README.md
+pyproject.toml
+src/photobook/__init__.py
+src/photobook/cli.py
+src/photobook/config.py
+src/photobook/layout.py
+src/photobook/metadata.py
+src/photobook/renderer.py
+src/photobook/scanner.py
+src/photobook.egg-info/PKG-INFO
+src/photobook.egg-info/SOURCES.txt
+src/photobook.egg-info/dependency_links.txt
+src/photobook.egg-info/entry_points.txt
+src/photobook.egg-info/requires.txt
+src/photobook.egg-info/top_level.txt
+tests/test_metadata.py
+tests/test_scanner.py
