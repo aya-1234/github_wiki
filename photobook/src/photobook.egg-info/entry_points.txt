@@ -1,2 +1,0 @@
-[console_scripts]
-photobook = photobook.cli:main

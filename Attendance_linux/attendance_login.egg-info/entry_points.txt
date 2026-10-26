@@ -1,2 +1,0 @@
-[console_scripts]
-attendance-login = attendance_login.main:cli

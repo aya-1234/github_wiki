@@ -1,5 +1,0 @@
-Metadata-Version: 2.1
-Name: attendance-login
-Version: 0.1.0
-Summary: Salesforce勤怠管理システム自動入力ツール
-Requires-Python: >=3.10
